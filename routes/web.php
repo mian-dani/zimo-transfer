@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,5 +30,12 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 Route::prefix('admin')->middleware('auth')->group(function () {
-    Route::get('/aside', [AuthController::class, 'aside'])->name('admin.aside');
+
+    //  if (Auth::check() && Auth::user()->hasRole('admin')) { 
+        Route::get('/aside', [AuthController::class, 'aside'])->name('admin.aside');
+    // }
+    
 });
+
+
+

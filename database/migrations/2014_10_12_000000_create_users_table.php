@@ -20,6 +20,48 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+
+
+        // Add the roles and permissions columns
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->string('guard_name')->default('web');
+            $table->timestamps();
+        });
+
+
+        Schema::create('permissions', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->string('guard_name')->default('web');
+            $table->timestamps();
+        });
+
+
+        Schema::create('model_has_roles', function (Blueprint $table) {
+            $table->morphs('model');
+            $table->foreignId('role_id')->constrained()->onDelete('cascade');
+            // $table->string('model_type');
+            $table->timestamps();
+        });
+
+
+        Schema::create('model_has_permissions', function (Blueprint $table) {
+            $table->morphs('model');
+            $table->foreignId('permission_id')->constrained()->onDelete('cascade');
+             //$table->string('model_type');
+            $table->timestamps();
+        });
+
+
+        Schema::create('role_has_permissions', function (Blueprint $table) {
+            $table->foreignId('role_id')->constrained()->onDelete('cascade');
+            $table->foreignId('permission_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
+
     }
 
     /**
@@ -27,6 +69,11 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('role_has_permissions');
+        Schema::dropIfExists('model_has_permissions');
+        Schema::dropIfExists('model_has_roles');
+        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('roles');
         Schema::dropIfExists('users');
     }
 };

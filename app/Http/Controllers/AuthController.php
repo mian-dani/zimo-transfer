@@ -7,10 +7,13 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+
+
     public function showLoginForm()
     {
         return view('admin.pages.auth-login-cover');
     }
+
 
 
 
@@ -20,11 +23,16 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-             return redirect()->route('admin.aside');
+            if (auth()->user()->hasRole('admin')) {
+                return redirect()->route('admin.aside');
+            }
         }
 
         return redirect()->back()->withErrors(['login' => 'Invalid credentials']);
     }
+
+
+
 
 
     public function logout()
@@ -32,6 +40,8 @@ class AuthController extends Controller
         Auth::logout();
         return redirect()->route('login');
     }
+
+
 
 
 
