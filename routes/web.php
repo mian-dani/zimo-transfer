@@ -29,12 +29,9 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 
-Route::prefix('admin')->middleware('auth')->group(function () {
 
-    //  if (Auth::check() && Auth::user()->hasRole('admin')) { 
-        Route::get('/aside', [AuthController::class, 'aside'])->name('admin.aside');
-    // }
-    
+Route::prefix('admin')->middleware('auth')->group(function () {
+        Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('admin.dashboard');
 });
 
 
